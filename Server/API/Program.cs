@@ -4,6 +4,7 @@ using Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connection =
@@ -32,6 +33,12 @@ catch (Exception ex)
     logger.LogError(ex, "An error ocurred during migration.");
 }
 
+app.UseCors(options =>
+    options
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins("https://localhost:3000", "http://localhost:3000")
+);
 app.MapControllers();
 
 app.Run();
