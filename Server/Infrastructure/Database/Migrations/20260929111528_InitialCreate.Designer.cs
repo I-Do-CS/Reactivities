@@ -4,14 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Persistence;
 
 #nullable disable
 
-namespace Persistence.Migrations
+namespace Infrastructure.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260927235026_InitialCreate")]
+    [Migration("20260929111528_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

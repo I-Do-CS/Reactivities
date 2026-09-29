@@ -1,11 +1,27 @@
 using Domain;
+using Infrastructure.Database;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-namespace Persistence;
+namespace Infrastructure;
 
-public sealed class DbInitializer
+public static class Utilities
 {
-    public static async Task SeedData(ApplicationDbContext dbContext)
+    public static async Task ApplyDatabaseMigrations(this WebApplication app)
     {
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        await dbContext.Database.MigrateAsync();
+    }
+
+    public static async Task SeedDatabase(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
         if (dbContext.Activities.Any())
             return;
 

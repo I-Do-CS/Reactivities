@@ -1,7 +1,7 @@
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Persistence;
+namespace Infrastructure.Database;
 
 public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(options)
 {

@@ -1,5 +1,6 @@
+using Infrastructure;
+using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,19 +19,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope();
-var services = scope.ServiceProvider;
-
-try
+if (app.Environment.IsDevelopment())
 {
-    var dbContext = services.GetRequiredService<ApplicationDbContext>();
-    await dbContext.Database.MigrateAsync();
-    await DbInitializer.SeedData(dbContext);
-}
-catch (Exception ex)
-{
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "An error ocurred during migration.");
+    try
+    {
+        await app.ApplyDatabaseMigrations();
+        await app.SeedDatabase();
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(
+            ex,
+            "An error occurred while applying migrations or seeding the database."
+        );
+    }
 }
 
 app.UseCors(options =>
