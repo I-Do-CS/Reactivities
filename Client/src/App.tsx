@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
+import { API_BASE_URL } from "./lib/constants";
 
 import type { Activity } from "./lib/types";
 
@@ -8,9 +9,8 @@ const App = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   useEffect(() => {
     const getActivities = async () => {
-      const response = await axios.get<Activity[]>(
-        "https://localhost:5001/api/activities"
-      );
+      const url = API_BASE_URL + "/activities";
+      const response = await axios.get<Activity[]>(url);
       setActivities(response.data);
     };
 
